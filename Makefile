@@ -70,6 +70,28 @@ database-fixtures-load: ## Load fixtures
 fixtures: ## Alias for database-fixtures-load
 	$(MAKE) database-fixtures-load
 
+## —— ✅ Test ——
+.PHONY: tests
+tests: ## Run all tests
+	$(MAKE) database-init-test
+	$(PHP) bin/phpunit --testdox tests/Unit/
+	$(PHP) bin/phpunit --testdox tests/Functional/
+	$(PHP) bin/phpunit --testdox tests/E2E/
+
+database-init-test: ## Init database for test
+	$(SYMFONY_CONSOLE) d:d:d --force --if-exists --env=test
+	$(SYMFONY_CONSOLE) d:d:c --env=test
+	$(SYMFONY_CONSOLE) d:m:m --no-interaction --env=test
+	$(SYMFONY_CONSOLE) d:f:l --no-interaction --env=test
+
+unit-test: ## Run unit tests
+	$(MAKE) database-init-test
+	$(PHP) bin/phpunit --testdox tests/Unit/
+
+functional-test: ## Run functional tests
+	$(MAKE) database-init-test
+	$(PHP) bin/phpunit --testdox tests/Functional/
+
 ## ———— 🛠️  Others ————
 help: ## List of commands
 	@grep -E '(^[a-zA-Z0-9_-]+:.*?##.*$$)|(^##)' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}{printf "\033[32m%-30s\033[0m %s\n", $$1, $$2}' | sed -e 's/\[32m##/[33m/'
