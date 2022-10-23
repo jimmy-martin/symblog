@@ -14,8 +14,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Post
 {
     const STATES = ['STATE_DRAFT', 'STATE_PUBLISHED'];
-    const STATE_DRAFT = Post::STATES[0];
-    const STATE_PUBLISHED = Post::STATES[1];
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
