@@ -2,7 +2,7 @@
 
 namespace App\Repository\Post;
 
-use App\Entity\Post;
+use App\Entity\Post\Post;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -37,5 +37,20 @@ class PostRepository extends ServiceEntityRepository
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+    }
+
+    /**
+     * Get published posts
+     *
+     * @return array
+     */
+    public function findPublished(): array
+    {
+        return $this->createQueryBuilder('p')
+            ->where('p.state = :state')
+            ->setParameter('state', 'STATE_PUBLISHED')
+            ->orderBy('p.createdAt', 'DESC')
+            ->getQuery()
+            ->getResult();
     }
 }
