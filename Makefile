@@ -8,8 +8,9 @@ NPM = $(EXEC) npm
 SYMFONY_CONSOLE = $(PHP) bin/console
 
 # Colors
-GREEN = /bin/echo -e "\x1b[32m\#\# $1\x1b[0m"
-RED = /bin/echo -e "\x1b[31m\#\# $1\x1b[0m"
+GREEN = echo "\x1b[32m\#\# $1\x1b[0m"
+RED = echo "\x1b[31m\#\# $1\x1b[0m"
+
 
 ## ———— 🔥 App ————
 init: ## Init the project with docker
@@ -25,6 +26,7 @@ start: ## Start app
 	$(MAKE) docker-start 
 docker-start: 
 	$(DOCKER_COMPOSE) up -d
+	@$(call GREEN,"The containers are now running.")
 
 stop: ## Stop app
 	$(MAKE) docker-stop
@@ -35,9 +37,11 @@ docker-stop:
 ## ———— 🎻 Composer ————
 composer-install: ## Install dependencies
 	$(COMPOSER) install
+	@$(call GREEN,"All dependencies are installed.")
 
 composer-update: ## Update dependencies
 	$(COMPOSER) update
+	@$(call GREEN,"All dependencies are updated.")
 
 ## ———— 📊 Database ————
 database-init: ## Init database
